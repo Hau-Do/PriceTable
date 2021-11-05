@@ -8,8 +8,6 @@ describe('formatPrice', () => {
     ];
     for(const testcase of testCases) {
         test(`should return ${testcase.expected}`, () => {
-            const inputPrice = 2580;
-            const outputPrice = '2,580';
             expect(formatPrice(testcase.received)).toEqual(testcase.expected);
         });
     }

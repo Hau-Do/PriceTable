@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { Button, GoToCart, PaperSize, Table } from "../../components";
+import { GoToCart, PaperSize, Table } from "../../components";
 import { HOST_API, PRICES } from '../../constants';
 
+const DEFAULT_PAPER_SIZE = 'A4';
+
 const PricePage = ()=>{
-    const [paperSize, setPaperSize] = useState('A4')
     const [prices, setPrices] = useState([]);
     const [spiecePriceInfo, setSpiecePriceInfo] = useState({});
     
     useEffect(() => {
-        requestData(paperSize);
+        requestData(DEFAULT_PAPER_SIZE);
     }, []);
 
     const requestData = async (paperSize) => {

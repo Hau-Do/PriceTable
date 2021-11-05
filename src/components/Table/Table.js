@@ -1,25 +1,26 @@
 import { Button } from "..";
 
+const HOVER_COLOR = 'wheat';
+const LEAVE_COLOR = 'white';
+const CLICKED_COLOR = '#525252';
+
 const Table = ({ data, onCell }) => {
 
-    const mouseEnterRow=(e)=>{
-        let numChild = e.currentTarget.children;
+    const changeColorRow = (event, color) => {
+        let numChild = event.currentTarget.children;
         for(let i = 0; i < numChild.length; i++){
-            numChild[i].style.backgroundColor = 'wheat';
+            numChild[i].style.backgroundColor = color;
         }
     }
-    
-    const mouseLeaveRow=(e)=>{
-        let numChild = e.currentTarget.children;
-        for(let i = 0; i < numChild.length; i++){
-            numChild[i].style.backgroundColor = 'white';
+
+    const changeColorColumn = (event, numRows, color) => {
+        for(let i = 0; i < numRows; i++){
+            document.getElementsByClassName(event.target.className)[i].style.backgroundColor = color;
         }
     }
 
     const mouseEnterColumn = (e, priceByBizDay, numRows) => {
-        for(let i = 0;i<numRows;i++){
-            document.getElementsByClassName(e.target.className)[i].style.backgroundColor = 'wheat';
-        }
+        changeColorColumn(e, numRows, HOVER_COLOR);
         e.target.style.backgroundColor = 'gray';
         document.getElementById('order-days').innerText = 'Business Days';
         document.getElementById('order-days').innerText += ':'+ priceByBizDay.business_day;
@@ -28,16 +29,13 @@ const Table = ({ data, onCell }) => {
     }
 
     const mouseLeaveColumn = (e, priceByBizDay, numRows) => {
-        for(let i = 0; i < numRows; i++){
-            document.getElementsByClassName(e.target.className)[i].style.backgroundColor = 'white';
-        }
-        e.target.style.backgroundColor = 'wheat';
+        changeColorColumn(e, numRows, LEAVE_COLOR);
+        e.target.style.backgroundColor = HOVER_COLOR;
     }
 
     const clickCell = (e, priceByBizDay) => {
         onCell(priceByBizDay);
-        e.target.style.backgroundColor = '#525252';
-        
+        e.target.style.backgroundColor = CLICKED_COLOR;
     }
 
     return(
@@ -47,12 +45,12 @@ const Table = ({ data, onCell }) => {
                 <table>
                     <tbody>
                         {data.map((pricesByQuantity, index) => 
-                            <tr key={index} onMouseEnter={mouseEnterRow} onMouseLeave={mouseLeaveRow}>
+                            <tr key={index} onMouseEnter={(event) => changeColorRow(event, HOVER_COLOR)} onMouseLeave={(event) => changeColorRow(event, LEAVE_COLOR)}>
                                 {pricesByQuantity.map((priceByBizDay, idx) => 
                                     <td 
                                         className={`td${idx}`}
                                         key={idx} 
-                                        style={{padding:10, paddingRight:25,paddingLeft:25,backgroundColor:"white",fontSize:10}}
+                                        style={{padding:10, paddingRight:25, paddingLeft:25, backgroundColor:LEAVE_COLOR, fontSize:10}}
                                         onMouseEnter={(e) => mouseEnterColumn(e, priceByBizDay, data.length)} 
                                         onMouseLeave={(e) => mouseLeaveColumn(e, priceByBizDay, data.length)} 
                                         onClick={(e) => clickCell(e, priceByBizDay)}
